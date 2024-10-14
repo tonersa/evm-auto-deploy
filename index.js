@@ -18,8 +18,9 @@ function generateTokenName() {
   return `${randomAnimal}Bonk`; // Contoh: LionBonk
 }
 
-function generateTokenSymbol() {
-  return `BONK`; // Simbol tetap sama
+function generateTokenSymbol(tokenName) {
+  const animalInitials = tokenName.slice(0, 2).toUpperCase(); // Ambil dua huruf pertama
+  return `${animalInitials}BK`; // Contoh: LBK
 }
 
 function generateTokenSupply() {
@@ -51,20 +52,28 @@ async function main() {
     process.exit(1);
   }
 
-  // Menghasilkan nama, simbol, dan pasokan token secara otomatis
+  // Menghasilkan nama token
   const name = generateTokenName();
-  const symbol = generateTokenSymbol();
+  const symbol = generateTokenSymbol(name);
   const supply = generateTokenSupply();
 
   // Menambahkan jeda 10 detik sebelum deploy kontrak
   console.log(`Preparing to deploy token...`);
   await delay(10000); // Jeda 10 detik
 
+  // Set gas limit dan gas price
+  const gasLimit = 3000000; // Contoh: 3 juta
+  const gasPrice = '20000000000'; // Contoh: 20 Gwei
+
   const contractAddress = await deployContract(
     selectedNetwork,
     name,
     symbol,
-    supply
+    supply,
+    {
+      gasLimit,
+      gasPrice,
+    }
   );
 
   console.log(`\nDeployment completed!`.green.bold);
