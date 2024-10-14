@@ -10,7 +10,13 @@ const { deployContract } = require('./src/deploy');
 const animalNames = [
   "Lion", "Tiger", "Bear", "Wolf", "Eagle",
   "Shark", "Dolphin", "Falcon", "Panda", "Giraffe",
-  "Zebra", "Kangaroo", "Elephant", "Monkey", "Hippo"
+  "Zebra", "Kangaroo", "Elephant", "Monkey", "Hippo",
+  "Cheetah", "Leopard", "Rhino", "Octopus", "Koala",
+  "Penguin", "Owl", "Parrot", "Swan", "Antelope",
+  "Buffalo", "Bison", "Jaguar", "Whale", "Tortoise",
+  "Sloth", "Squirrel", "Raccoon", "Bat", "Crab",
+  "Hedgehog", "Ferret", "Gorilla", "Camel", "Crocodile",
+  "Gecko", "Iguana", "Peacock", "Armadillo", "Pangolin"
 ];
 
 function generateTokenName() {
@@ -52,35 +58,40 @@ async function main() {
     process.exit(1);
   }
 
-  // Menghasilkan nama token
-  const name = generateTokenName();
-  const symbol = generateTokenSymbol(name);
-  const supply = generateTokenSupply();
-
-  // Menambahkan jeda 10 detik sebelum deploy kontrak
-  console.log(`Preparing to deploy token...`);
-  await delay(10000); // Jeda 10 detik
-
   // Set gas limit dan gas price
   const gasLimit = 3000000; // Contoh: 3 juta
   const gasPrice = '20000000000'; // Contoh: 20 Gwei
 
-  const contractAddress = await deployContract(
-    selectedNetwork,
-    name,
-    symbol,
-    supply,
-    {
-      gasLimit,
-      gasPrice,
-    }
-  );
+  for (let i = 0; i < 50; i++) {
+    // Menghasilkan nama token
+    const name = generateTokenName();
+    const symbol = generateTokenSymbol(name);
+    const supply = generateTokenSupply();
 
-  console.log(`\nDeployment completed!`.green.bold);
-  console.log(`Token Name: ${name}`);
-  console.log(`Token Symbol: ${symbol}`);
-  console.log(`Token Supply: ${supply}`);
-  console.log(`Contract Address: ${contractAddress}`);
+    console.log(`Deploying token ${i + 1} of 50: ${name} (${symbol}) with supply: ${supply}`);
+
+    // Menambahkan jeda 10 detik sebelum deploy kontrak
+    await delay(10000); // Jeda 10 detik
+
+    const contractAddress = await deployContract(
+      selectedNetwork,
+      name,
+      symbol,
+      supply,
+      {
+        gasLimit,
+        gasPrice,
+      }
+    );
+
+    console.log(`\nDeployment completed!`.green.bold);
+    console.log(`Token Name: ${name}`);
+    console.log(`Token Symbol: ${symbol}`);
+    console.log(`Token Supply: ${supply}`);
+    console.log(`Contract Address: ${contractAddress}`);
+  }
+
+  console.log(`All tokens deployed!`.green.bold);
 }
 
 main().catch(console.error);
