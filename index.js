@@ -32,30 +32,6 @@ function generateTokenSupply() {
   return Math.floor(Math.random() * 1000000) + 1;
 }
 
-async function deployTokens(selectedNetwork) {
-  for (let i = 0; i < 50; i++) {
-    const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
-    const name = generateTokenName();
-    const symbol = generateTokenSymbol(animal);
-    const supply = generateTokenSupply();
-
-    const contractAddress = await deployContract(
-      selectedNetwork,
-      name,
-      symbol,
-      supply
-    );
-
-    console.log(`\nDeployment ${i + 1} completed!`.green.bold);
-    console.log(`Token Name: ${name}`);
-    console.log(`Token Symbol: ${symbol}`);
-    console.log(`Token Supply: ${supply}`);
-    console.log(`Contract Address: ${contractAddress}`);
-
-    await delay(10000); // Jeda 10 detik sebelum deploy berikutnya
-  }
-}
-
 async function main() {
   displayHeader();
   console.log(`Please wait...\n`.yellow);
@@ -80,12 +56,31 @@ async function main() {
     process.exit(1);
   }
 
-  await deployTokens(selectedNetwork);
-  
-  console.log('\nAll tokens have been deployed! Exiting now...'.green);
+  for (let i = 0; i < 50; i++) {
+    const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
+    const name = generateTokenName();
+    const symbol = generateTokenSymbol(animal);
+    const supply = generateTokenSupply();
+
+    const contractAddress = await deployContract(
+      selectedNetwork,
+      name,
+      symbol,
+      supply
+    );
+
+    console.log(`\nDeployment ${i + 1} completed!`.green.bold);
+    console.log(`Token Name: ${name}`);
+    console.log(`Token Symbol: ${symbol}`);
+    console.log(`Token Supply: ${supply}`);
+    console.log(`Contract Address: ${contractAddress}`);
+
+    await delay(10000); // Jeda 10 detik sebelum deploy berikutnya
+  }
 }
 
 main().catch(console.error);
+
 
 main().catch((error) => {
   console.error(error);
