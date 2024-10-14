@@ -2,12 +2,24 @@ require('dotenv').config();
 require('colors');
 const {
   loadNetworkConfig,
-  getUserInput,
   displayHeader,
   delay,
 } = require('./src/utils');
 const { deployContract } = require('./src/deploy');
-const readlineSync = require('readline-sync');
+
+function generateTokenName() {
+  const names = ["TokenA", "TokenB", "TokenC"];
+  return names[Math.floor(Math.random() * names.length)];
+}
+
+function generateTokenSymbol() {
+  const symbols = ["TKA", "TKB", "TKC"];
+  return symbols[Math.floor(Math.random() * symbols.length)];
+}
+
+function generateTokenSupply() {
+  return Math.floor(Math.random() * 1000000) + 1; // Pasokan antara 1 hingga 1,000,000
+}
 
 async function main() {
   displayHeader();
@@ -26,8 +38,7 @@ async function main() {
   });
 
   const networkIndex =
-    parseInt(readlineSync.question('\nSelect a network (enter number): '.cyan)) -
-    1;
+    parseInt(require('readline-sync').question('\nSelect a network (enter number): '.cyan)) - 1;
   const selectedNetwork = networks[networkIndex];
 
   if (!selectedNetwork) {
@@ -35,7 +46,10 @@ async function main() {
     process.exit(1);
   }
 
-  const { name, symbol, supply } = getUserInput();
+  // Menghasilkan nama, simbol, dan pasokan token secara otomatis
+  const name = generateTokenName();
+  const symbol = generateTokenSymbol();
+  const supply = generateTokenSupply();
 
   const contractAddress = await deployContract(
     selectedNetwork,
@@ -50,6 +64,8 @@ async function main() {
   console.log(`Token Supply: ${supply}`);
   console.log(`Contract Address: ${contractAddress}`);
 }
+
+main().catch(console.error);
 
 main().catch((error) => {
   console.error(error);
