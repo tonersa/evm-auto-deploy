@@ -21,24 +21,22 @@ const animalNames = [
 
 function generateTokenName() {
   const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
-  return `${randomAnimal}Bonk`; // Contoh: LionBonk
+  return `${randomAnimal}Bonk`;
 }
 
-function generateTokenSymbol(tokenName) {
-  const animalInitials = tokenName.slice(0, 2).toUpperCase(); // Ambil dua huruf pertama
-  return `${animalInitials}BK`; // Contoh: LBK
+function generateTokenSymbol(animal) {
+  return `${animal.charAt(0)}${animal.charAt(1)}K`; // Contoh: "Lion" menjadi "LK"
 }
 
 function generateTokenSupply() {
-  return Math.floor(Math.random() * 1000000) + 1; // Pasokan antara 1 hingga 1,000,000
+  return Math.floor(Math.random() * 1000000) + 1;
 }
 
 async function main() {
   displayHeader();
   console.log(`Please wait...\n`.yellow);
-
   await delay(3000);
-
+  
   console.log('Welcome to EVM Auto Deploy!'.green.bold);
 
   const networkType = process.argv[2] || 'testnet';
@@ -58,40 +56,27 @@ async function main() {
     process.exit(1);
   }
 
-  // Set gas limit dan gas price
-  const gasLimit = 3000000; // Contoh: 3 juta
-  const gasPrice = '20000000000'; // Contoh: 20 Gwei
-
   for (let i = 0; i < 50; i++) {
-    // Menghasilkan nama token
+    const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
     const name = generateTokenName();
-    const symbol = generateTokenSymbol(name);
+    const symbol = generateTokenSymbol(animal);
     const supply = generateTokenSupply();
-
-    console.log(`Deploying token ${i + 1} of 50: ${name} (${symbol}) with supply: ${supply}`);
-
-    // Menambahkan jeda 10 detik sebelum deploy kontrak
-    await delay(10000); // Jeda 10 detik
 
     const contractAddress = await deployContract(
       selectedNetwork,
       name,
       symbol,
-      supply,
-      {
-        gasLimit,
-        gasPrice,
-      }
+      supply
     );
 
-    console.log(`\nDeployment completed!`.green.bold);
+    console.log(`\nDeployment ${i + 1} completed!`.green.bold);
     console.log(`Token Name: ${name}`);
     console.log(`Token Symbol: ${symbol}`);
     console.log(`Token Supply: ${supply}`);
     console.log(`Contract Address: ${contractAddress}`);
-  }
 
-  console.log(`All tokens deployed!`.green.bold);
+    await delay(10000); // Jeda 10 detik sebelum deploy berikutnya
+  }
 }
 
 main().catch(console.error);
