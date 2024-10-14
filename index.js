@@ -7,14 +7,19 @@ const {
 } = require('./src/utils');
 const { deployContract } = require('./src/deploy');
 
+const animalNames = [
+  "Lion", "Tiger", "Bear", "Wolf", "Eagle",
+  "Shark", "Dolphin", "Falcon", "Panda", "Giraffe",
+  "Zebra", "Kangaroo", "Elephant", "Monkey", "Hippo"
+];
+
 function generateTokenName() {
-  const names = ["TokenA", "TokenB", "TokenC"];
-  return names[Math.floor(Math.random() * names.length)];
+  const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
+  return `${randomAnimal}Bonk`; // Contoh: LionBonk
 }
 
 function generateTokenSymbol() {
-  const symbols = ["TKA", "TKB", "TKC"];
-  return symbols[Math.floor(Math.random() * symbols.length)];
+  return `BONK`; // Simbol tetap sama
 }
 
 function generateTokenSupply() {
@@ -50,6 +55,10 @@ async function main() {
   const name = generateTokenName();
   const symbol = generateTokenSymbol();
   const supply = generateTokenSupply();
+
+  // Menambahkan jeda 10 detik sebelum deploy kontrak
+  console.log(`Preparing to deploy token...`);
+  await delay(10000); // Jeda 10 detik
 
   const contractAddress = await deployContract(
     selectedNetwork,
