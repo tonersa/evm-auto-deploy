@@ -82,8 +82,10 @@ async function main() {
 
   await deployTokens(selectedNetwork);
   
-  console.log('\n
+  console.log('\nAll tokens have been deployed! Exiting now...'.green);
+}
 
+main().catch(console.error);
 
 main().catch((error) => {
   console.error(error);
