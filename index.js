@@ -6,6 +6,7 @@ const {
   delay,
 } = require('./src/utils');
 const { deployContract } = require('./src/deploy');
+const readline = require('readline-sync');
 
 const animalNames = [
   "Lion", "Tiger", "Bear", "Wolf", "Eagle",
@@ -25,7 +26,7 @@ function generateTokenName() {
 }
 
 function generateTokenSymbol(animal) {
-  return `${animal.charAt(0)}${animal.charAt(1)}K`; // Contoh: "Lion" menjadi "LK"
+  return `${animal.substring(0, 2).toUpperCase()}K`;
 }
 
 function generateTokenSupply() {
@@ -38,49 +39,61 @@ async function main() {
   await delay(3000);
   
   console.log('Welcome to EVM Auto Deploy!'.green.bold);
-
   const networkType = process.argv[2] || 'testnet';
   const networks = loadNetworkConfig(networkType);
-
   console.log(`Available networks:`.yellow);
   networks.forEach((network, index) => {
     console.log(`${index + 1}. ${network.name}`);
   });
 
-  const networkIndex =
-    parseInt(require('readline-sync').question('\nSelect a network (enter number): '.cyan)) - 1;
+  const networkIndex = parseInt(readline.question('\nSelect a network (enter number): '.cyan)) - 1;
   const selectedNetwork = networks[networkIndex];
-
   if (!selectedNetwork) {
     console.error('Invalid network selection'.red);
     process.exit(1);
   }
 
-  for (let i = 0; i < 50; i++) {
+  const deploymentCount = parseInt(readline.question('\nEnter the number of deployments to perform: '.cyan));
+  const delayBetweenDeployments = parseInt(readline.question('Enter the delay between deployments (in seconds): '.cyan)) * 1000;
+
+  for (let i = 0; i < deploymentCount; i++) {
     const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
     const name = generateTokenName();
     const symbol = generateTokenSymbol(animal);
     const supply = generateTokenSupply();
 
-    const contractAddress = await deployContract(
-      selectedNetwork,
-      name,
-      symbol,
-      supply
-    );
+    console.log(`\nStarting deployment ${i + 1} of ${deploymentCount}...`.yellow);
 
-    console.log(`\nDeployment ${i + 1} completed!`.green.bold);
-    console.log(`Token Name: ${name}`);
-    console.log(`Token Symbol: ${symbol}`);
-    console.log(`Token Supply: ${supply}`);
-    console.log(`Contract Address: ${contractAddress}`);
+    try {
+      const contractAddress = await deployContract(
+        selectedNetwork,
+        name,
+        symbol,
+        supply
+      );
 
-    await delay(10000); // Jeda 10 detik sebelum deploy berikutnya
+      console.log(`\nDeployment ${i + 1} completed!`.green.bold);
+      console.log(`Token Name: ${name}`);
+      console.log(`Token Symbol: ${symbol}`);
+      console.log(`Token Supply: ${supply}`);
+      console.log(`Contract Address: ${contractAddress}`);
+    } catch (error) {
+      console.error(`Error in deployment ${i + 1}:`.red, error.message);
+    }
+
+    if (i < deploymentCount - 1) {
+      console.log(`\nWaiting for ${delayBetweenDeployments / 1000} seconds before next deployment...`.yellow);
+      await delay(delayBetweenDeployments);
+    }
   }
+
+  console.log('\nAll deployments completed!'.green.bold);
 }
 
-main().catch(console.error);
-
+main().catch((error) => {
+  console.error('An error occurred:'.red, error);
+  process.exit(1);
+});
 
 main().catch((error) => {
   console.error(error);
