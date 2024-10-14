@@ -6,7 +6,7 @@ const {
   delay,
 } = require('./src/utils');
 const { deployContract } = require('./src/deploy');
-const { ethers } = require('ethers'); // Pastikan ethers sudah terinstal
+const { ethers } = require('ethers'); // Pastikan ethers diimpor
 
 const animalNames = [
   "Lion", "Tiger", "Bear", "Wolf", "Eagle",
