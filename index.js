@@ -1,12 +1,12 @@
 require('dotenv').config();
 require('colors');
+const readline = require('readline-sync');
 const {
   loadNetworkConfig,
   displayHeader,
   delay,
 } = require('./src/utils');
 const { deployContract } = require('./src/deploy');
-const readline = require('readline-sync');
 
 const animalNames = [
   "Lion", "Tiger", "Bear", "Wolf", "Eagle",
@@ -53,16 +53,20 @@ async function main() {
     process.exit(1);
   }
 
-  const deploymentCount = parseInt(readline.question('\nEnter the number of deployments to perform: '.cyan));
+  const deploymentCount = parseInt(readline.question('Enter the number of deployments to perform: '.cyan));
   const delayBetweenDeployments = parseInt(readline.question('Enter the delay between deployments (in seconds): '.cyan)) * 1000;
 
+  console.log(`\nPreparing to deploy ${deploymentCount} contracts on ${selectedNetwork.name}...`.yellow);
+  await delay(2000);
+
   for (let i = 0; i < deploymentCount; i++) {
+    console.log(`\nStarting deployment ${i + 1} of ${deploymentCount}...`.yellow);
+    console.log(`Deploying contract to ${selectedNetwork.name}...`.cyan);
+
     const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
     const name = generateTokenName();
     const symbol = generateTokenSymbol(animal);
     const supply = generateTokenSupply();
-
-    console.log(`\nStarting deployment ${i + 1} of ${deploymentCount}...`.yellow);
 
     try {
       const contractAddress = await deployContract(
@@ -94,7 +98,6 @@ main().catch((error) => {
   console.error('An error occurred:'.red, error);
   process.exit(1);
 });
-
 main().catch((error) => {
   console.error(error);
   process.exit(1);
