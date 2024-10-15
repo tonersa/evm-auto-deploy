@@ -8,29 +8,43 @@ const {
 const { deployContract } = require('./src/deploy');
 const readline = require('readline-sync');
 
-const animalNames = [
-  "Lion", "Tiger", "Bear", "Wolf", "Eagle",
-  "Shark", "Dolphin", "Falcon", "Panda", "Giraffe",
-  "Zebra", "Kangaroo", "Elephant", "Monkey", "Hippo",
-  "Cheetah", "Leopard", "Rhino", "Octopus", "Koala",
-  "Penguin", "Owl", "Parrot", "Swan", "Antelope",
-  "Buffalo", "Bison", "Jaguar", "Whale", "Tortoise",
-  "Sloth", "Squirrel", "Raccoon", "Bat", "Crab",
-  "Hedgehog", "Ferret", "Gorilla", "Camel", "Crocodile",
-  "Gecko", "Iguana", "Peacock", "Armadillo", "Pangolin"
-];
+const nameCategories = {
+  animals: [
+    "Lion", "Tiger", "Bear", "Wolf", "Eagle", "Shark", "Dolphin", "Falcon", "Panda", "Giraffe",
+    "Zebra", "Kangaroo", "Elephant", "Monkey", "Hippo", "Cheetah", "Leopard", "Rhino", "Octopus", "Koala"
+  ],
+  nature: [
+    "Mountain", "Ocean", "Forest", "River", "Desert", "Glacier", "Volcano", "Canyon", "Prairie", "Tundra",
+    "Island", "Reef", "Waterfall", "Cave", "Oasis", "Meadow", "Fjord", "Lagoon", "Geyser", "Dune"
+  ],
+  memes: [
+    "Doge", "Pepe", "Wojak", "Stonks", "Rickroll", "Distracted", "Surprised", "ThisIsFine", "Kermit", "SpongeBob",
+    "Keyboard", "Pikachu", "Drake", "Galaxy", "Moon", "Diamond", "Rocket", "Ape", "Hodl", "Lambo"
+  ],
+  crypto: [
+    "Bitcoin", "Ethereum", "Blockchain", "DeFi", "NFT", "Metaverse", "Web3", "DAO", "Token", "Wallet",
+    "Mining", "Staking", "Yield", "Liquidity", "Airdrop", "Fomo", "Shill", "Rekt", "Bullish", "Bearish"
+  ]
+};
 
 function generateTokenName() {
-  const randomAnimal = animalNames[Math.floor(Math.random() * animalNames.length)];
-  return `${randomAnimal}Bonk`;
+  const category = Object.keys(nameCategories)[Math.floor(Math.random() * Object.keys(nameCategories).length)];
+  const name = nameCategories[category][Math.floor(Math.random() * nameCategories[category].length)];
+  return `${name}`;
 }
 
-function generateTokenSymbol(animal) {
-  return `${animal.substring(0, 2).toUpperCase()}K`;
+function generateTokenSymbol(name) {
+  // If name is one word, use first 3 letters. If more, use first letter of each word (up to 3).
+  const words = name.split(/\s+/);
+  if (words.length === 1) {
+    return name.substring(0, 3).toUpperCase();
+  } else {
+    return words.slice(0, 3).map(word => word[0].toUpperCase()).join('');
+  }
 }
 
 function generateTokenSupply() {
-  return Math.floor(Math.random() * 1000000) + 1;
+  return Math.floor(Math.random() * 1000000000) + 1000000; // 1 million to 1 billion
 }
 
 async function main() {
@@ -63,9 +77,8 @@ async function main() {
     console.log(`\nStarting deployment ${i + 1} of ${deploymentCount}...`.yellow);
     console.log(`Deploying contract to ${selectedNetwork.name}...`.cyan);
 
-    const animal = animalNames[Math.floor(Math.random() * animalNames.length)];
     const name = generateTokenName();
-    const symbol = generateTokenSymbol(animal);
+    const symbol = generateTokenSymbol(name);
     const supply = generateTokenSupply();
 
     try {
@@ -79,7 +92,7 @@ async function main() {
       console.log(`\nDeployment ${i + 1} completed!`.green.bold);
       console.log(`Token Name: ${name}`);
       console.log(`Token Symbol: ${symbol}`);
-      console.log(`Token Supply: ${supply}`);
+      console.log(`Token Supply: ${supply.toLocaleString()}`);
       console.log(`Contract Address: ${contractAddress}`);
     } catch (error) {
       console.error(`Error in deployment ${i + 1}:`.red, error.message);
