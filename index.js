@@ -8,33 +8,52 @@ const {
 const { deployContract } = require('./src/deploy');
 const readline = require('readline-sync');
 
-const animeGirlNames = [
-  "Mikasa", "Asuka", "Rei", "Misato", "Sakura",
-  "Hinata", "Tsunade", "Winry", "Riza", "Erza",
-  "Lucy", "Rukia", "Orihime", "Saber", "Rin",
-  "Megumin", "Aqua", "Darkness", "Zero Two", "Ichigo",
-  "Rem", "Ram", "Emilia", "Nezuko", "Nami",
-  "Robin", "Boa", "Violet", "Kurisu", "Mio",
-  "Yui", "Asuna", "Sinon", "Albedo", "Shaltear",
-  "Tatsumaki", "Fubuki", "Ochaco", "Momo", "Tsuyu",
-  "Tohru", "Kanna", "Chika", "Kaguya", "Hayasaka",
-  "Marin", "Yor", "Anya", "Makima", "Power",
-  "Akame", "Mine", "Esdeath", "Ryuko", "Satsuki",
-  "Yuno", "Noelle", "Mimosa", "Nero", "Charlotte",
-  "Hestia", "Ais", "Ryuu", "Freya", "Liliruca",
-  "Raphtalia", "Filo", "Melty", "Malty", "Mirellia",
-  "Yumeko", "Mary", "Kirari", "Sayaka", "Midari",
-  "Hori", "Remi", "Yoruichi", "Rangiku", "Unohana",
-  "Shinobu", "Mitsuri", "Kanao", "Aoi", "Daki",
-  "Mai", "Nobara", "Maki", "Miwa", "Utahime",
-  "Faye", "Julia", "Judy", "Revy", "Balalaika",
-  "Motoko", "Faye Valentine", "Edward", "Integra", "Seras"
+const diverseNames = [
+  // Tech and Crypto
+  "Bitcoin", "Ethereum", "Blockchain", "NFT", "Metaverse",
+  "AI", "Robot", "Cyber", "Digital", "Virtual",
+  
+  // Nature and Elements
+  "Ocean", "Mountain", "Forest", "River", "Wind",
+  "Fire", "Earth", "Thunder", "Storm", "Sunset",
+  
+  // Animals
+  "Lion", "Eagle", "Shark", "Wolf", "Panda",
+  "Phoenix", "Dragon", "Tiger", "Falcon", "Dolphin",
+  
+  // Mythical and Fantasy
+  "Wizard", "Dragon", "Unicorn", "Elf", "Orc",
+  "Mage", "Paladin", "Titan", "Kraken", "Siren",
+  
+  // Space and Sci-Fi
+  "Galaxy", "Nebula", "Pulsar", "Quasar", "Asteroid",
+  "Starship", "Alien", "Cosmic", "Lunar", "Solar",
+  
+  // Pop Culture
+  "Meme", "Viral", "Trend", "Influencer", "Celebrity",
+  "Hashtag", "Selfie", "Emoji", "Gif", "Stream",
+  
+  // Food and Drinks
+  "Pizza", "Sushi", "Taco", "Burger", "Coffee",
+  "Ramen", "Donut", "Smoothie", "Matcha", "Boba",
+  
+  // Emotions and Concepts
+  "Joy", "Freedom", "Love", "Peace", "Hope",
+  "Dream", "Harmony", "Unity", "Bliss", "Zen",
+  
+  // Colors
+  "Crimson", "Azure", "Emerald", "Violet", "Gold",
+  "Obsidian", "Sapphire", "Ruby", "Ivory", "Onyx",
+  
+  // Abstract and Artistic
+  "Pixel", "Vector", "Quantum", "Fractal", "Neon",
+  "Retro", "Synth", "Glitch", "Vaporwave", "Surreal"
 ];
 
-const suffixes = ["", "Bonk", "Hard", "Wife"];
+const suffixes = ["", "X", "Pro", "Max", "Ultra", "Plus", "Prime", "Elite", "Hyper", "Mega"];
 
 function generateTokenName() {
-  const baseName = animeGirlNames[Math.floor(Math.random() * animeGirlNames.length)];
+  const baseName = diverseNames[Math.floor(Math.random() * diverseNames.length)];
   const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
   return `${baseName}${suffix ? ' ' + suffix : ''}`;
 }
