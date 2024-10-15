@@ -8,43 +8,44 @@ const {
 const { deployContract } = require('./src/deploy');
 const readline = require('readline-sync');
 
-const nameCategories = {
-  animals: [
-    "Lion", "Tiger", "Bear", "Wolf", "Eagle", "Shark", "Dolphin", "Falcon", "Panda", "Giraffe",
-    "Zebra", "Kangaroo", "Elephant", "Monkey", "Hippo", "Cheetah", "Leopard", "Rhino", "Octopus", "Koala"
-  ],
-  nature: [
-    "Mountain", "Ocean", "Forest", "River", "Desert", "Glacier", "Volcano", "Canyon", "Prairie", "Tundra",
-    "Island", "Reef", "Waterfall", "Cave", "Oasis", "Meadow", "Fjord", "Lagoon", "Geyser", "Dune"
-  ],
-  memes: [
-    "Doge", "Pepe", "Wojak", "Stonks", "Rickroll", "Distracted", "Surprised", "ThisIsFine", "Kermit", "SpongeBob",
-    "Keyboard", "Pikachu", "Drake", "Galaxy", "Moon", "Diamond", "Rocket", "Ape", "Hodl", "Lambo"
-  ],
-  crypto: [
-    "Bitcoin", "Ethereum", "Blockchain", "DeFi", "NFT", "Metaverse", "Web3", "DAO", "Token", "Wallet",
-    "Mining", "Staking", "Yield", "Liquidity", "Airdrop", "Fomo", "Shill", "Rekt", "Bullish", "Bearish"
-  ]
-};
+const animeGirlNames = [
+  "Mikasa", "Asuka", "Rei", "Misato", "Sakura",
+  "Hinata", "Tsunade", "Winry", "Riza", "Erza",
+  "Lucy", "Rukia", "Orihime", "Saber", "Rin",
+  "Megumin", "Aqua", "Darkness", "Zero Two", "Ichigo",
+  "Rem", "Ram", "Emilia", "Nezuko", "Nami",
+  "Robin", "Boa", "Violet", "Kurisu", "Mio",
+  "Yui", "Asuna", "Sinon", "Albedo", "Shaltear",
+  "Tatsumaki", "Fubuki", "Ochaco", "Momo", "Tsuyu",
+  "Tohru", "Kanna", "Chika", "Kaguya", "Hayasaka",
+  "Marin", "Yor", "Anya", "Makima", "Power",
+  "Akame", "Mine", "Esdeath", "Ryuko", "Satsuki",
+  "Yuno", "Noelle", "Mimosa", "Nero", "Charlotte",
+  "Hestia", "Ais", "Ryuu", "Freya", "Liliruca",
+  "Raphtalia", "Filo", "Melty", "Malty", "Mirellia",
+  "Yumeko", "Mary", "Kirari", "Sayaka", "Midari",
+  "Hori", "Remi", "Yoruichi", "Rangiku", "Unohana",
+  "Shinobu", "Mitsuri", "Kanao", "Aoi", "Daki",
+  "Mai", "Nobara", "Maki", "Miwa", "Utahime",
+  "Faye", "Julia", "Judy", "Revy", "Balalaika",
+  "Motoko", "Faye Valentine", "Edward", "Integra", "Seras"
+];
+
+const suffixes = ["", "Bonk", "Hard", "Wife"];
 
 function generateTokenName() {
-  const category = Object.keys(nameCategories)[Math.floor(Math.random() * Object.keys(nameCategories).length)];
-  const name = nameCategories[category][Math.floor(Math.random() * nameCategories[category].length)];
-  return `${name}`;
+  const baseName = animeGirlNames[Math.floor(Math.random() * animeGirlNames.length)];
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+  return `${baseName}${suffix ? ' ' + suffix : ''}`;
 }
 
 function generateTokenSymbol(name) {
-  // If name is one word, use first 3 letters. If more, use first letter of each word (up to 3).
-  const words = name.split(/\s+/);
-  if (words.length === 1) {
-    return name.substring(0, 3).toUpperCase();
-  } else {
-    return words.slice(0, 3).map(word => word[0].toUpperCase()).join('');
-  }
+  // Menggunakan huruf pertama dari setiap kata dalam nama, maksimal 4 huruf
+  return name.split(' ').map(word => word[0].toUpperCase()).join('').substring(0, 4);
 }
 
 function generateTokenSupply() {
-  return Math.floor(Math.random() * 1000000000) + 1000000; // 1 million to 1 billion
+  return Math.floor(Math.random() * 1000000000) + 1000000; // 1 juta hingga 1 miliar
 }
 
 async function main() {
