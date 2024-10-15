@@ -1,12 +1,12 @@
 require('dotenv').config();
 require('colors');
-const readline = require('readline-sync');
 const {
   loadNetworkConfig,
   displayHeader,
   delay,
 } = require('./src/utils');
 const { deployContract } = require('./src/deploy');
+const readline = require('readline-sync');
 
 const animalNames = [
   "Lion", "Tiger", "Bear", "Wolf", "Eagle",
@@ -96,9 +96,5 @@ async function main() {
 
 main().catch((error) => {
   console.error('An error occurred:'.red, error);
-  process.exit(1);
-});
-main().catch((error) => {
-  console.error(error);
   process.exit(1);
 });
