@@ -40,8 +40,9 @@ function generateTokenName() {
 }
 
 function generateTokenSymbol(name) {
-  // Menggunakan huruf pertama dari setiap kata dalam nama, maksimal 4 huruf
-  return name.split(' ').map(word => word[0].toUpperCase()).join('').substring(0, 4);
+  // Mengambil 3 huruf pertama dari nama, menghilangkan spasi
+  const nameWithoutSpaces = name.replace(/\s/g, '');
+  return nameWithoutSpaces.substring(0, 3).toUpperCase();
 }
 
 function generateTokenSupply() {
